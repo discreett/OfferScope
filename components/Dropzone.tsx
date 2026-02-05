@@ -5,27 +5,28 @@ import styles from '@/styles/dropzone.module.css'
 
 function MyDropzone() {
     const [files, setFiles] = useState([]);
-    const onDrop = useCallback(acceptedFiles => {
-        if (acceptedFiles?.length) {
-            setFiles(previousFiles => [
-                ...previousFiles, 
-                ...acceptedFiles.map(file =>
-                    Object.assign(file, {preview: URL.createObjectURL(file)})
-                )
-            ]);
-        }
-    }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+        const onDrop = useCallback((acceptedFiles: File[]) => {
+            const pdfs = (acceptedFiles || []).filter(file =>
+                file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
+            );
+            if (pdfs.length) {
+                setFiles(prev => [
+                    ...prev,
+                    ...pdfs.map(file =>
+                        Object.assign(file, {preview: URL.createObjectURL(file)})
+                    )
+                ]);
+            }
+        }, [])
+        const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: {'application/pdf': ['.pdf']}})
 
-  function removeFile(name: string): void {
-    setFiles(previousFiles => {
-      const fileToRemove = previousFiles.find(file => file.name === name);
-      if (fileToRemove?.preview) {
-        URL.revokeObjectURL(fileToRemove.preview);
-      }
-      return previousFiles.filter(file => file.name !== name);
-    });
-  }
+    const removeFile = (name) => {
+          setFiles(prev => {
+            const removed = prev.filter(file => file.name === name);
+            removed.forEach(f => URL.revokeObjectURL(f.preview));
+            return prev.filter(file => file.name !== name);
+          });
+    }
 
     return (
         <form>
