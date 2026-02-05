@@ -17,6 +17,16 @@ function MyDropzone() {
     }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
+  function removeFile(name: string): void {
+    setFiles(previousFiles => {
+      const fileToRemove = previousFiles.find(file => file.name === name);
+      if (fileToRemove?.preview) {
+        URL.revokeObjectURL(fileToRemove.preview);
+      }
+      return previousFiles.filter(file => file.name !== name);
+    });
+  }
+
     return (
         <form>
             <div {...getRootProps(
@@ -35,7 +45,15 @@ function MyDropzone() {
         <ul>
             {files.map(file => (
                 <li key={file.name}>
-                    <img src={file.preview} alt={file.name} width={100} height={100} />
+                    <img src={file.preview}
+                    alt={file.name}
+                    width={100}
+                    height={100}
+                    onLoad={() => URL.revokeObjectURL(file.preview)}
+                    />
+                    <button type = "button" onClick={() => removeFile(file.name)}>
+                      Remove
+                    </button>
                     <p>{file.name}</p>
                 </li>
             ))}
