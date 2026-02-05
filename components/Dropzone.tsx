@@ -5,28 +5,56 @@ import styles from '@/styles/dropzone.module.css'
 
 function MyDropzone() {
     const [files, setFiles] = useState([]);
-        const onDrop = useCallback((acceptedFiles: File[]) => {
-            const pdfs = (acceptedFiles || []).filter(file =>
-                file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
-            );
-            if (pdfs.length) {
-                setFiles(prev => [
-                    ...prev,
-                    ...pdfs.map(file =>
-                        Object.assign(file, {preview: URL.createObjectURL(file)})
-                    )
-                ]);
-            }
-        }, [])
-        const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: {'application/pdf': ['.pdf']}})
+    const [extracted, setExtracted] = useState<Record<string, string>>({});
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        const pdfs = (acceptedFiles || []).filter(file =>
+            file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
+        );
+        if (pdfs.length) {
+            setFiles(prev => [
+                ...prev,
+                ...pdfs.map(file =>
+                    Object.assign(file, {preview: URL.createObjectURL(file)})
+                )
+            ]);
+            // kick off server-side extraction for each PDF
+            pdfs.forEach(file => extractText(file));
+        }
+    }, [])
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({
+      onDrop,
+      accept: {'application/pdf': ['.pdf']},
+      maxFiles: 2,
+      multiple: true
+    })
 
-    const removeFile = (name) => {
-          setFiles(prev => {
-            const removed = prev.filter(file => file.name === name);
-            removed.forEach(f => URL.revokeObjectURL(f.preview));
-            return prev.filter(file => file.name !== name);
-          });
-    }
+        const removeFile = (name) => {
+                    setFiles(prev => {
+                        const removed = prev.filter(file => file.name === name);
+                        removed.forEach(f => URL.revokeObjectURL(f.preview));
+                        setExtracted(prevMap => {
+                            const copy = {...prevMap};
+                            delete copy[name];
+                            return copy;
+                        });
+                        return prev.filter(file => file.name !== name);
+                    });
+        }
+
+        async function extractText(file: File) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const res = await fetch('/api/extract', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/pdf', 'X-Filename': file.name },
+                    body: arrayBuffer
+                });
+                const data = await res.json();
+                setExtracted(prev => ({ ...prev, [file.name]: data.text || data.error || '' }));
+            } catch (err) {
+                setExtracted(prev => ({ ...prev, [file.name]: String(err) }));
+            }
+        }
 
     return (
         <form>
