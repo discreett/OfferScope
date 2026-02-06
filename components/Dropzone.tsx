@@ -28,18 +28,13 @@ function MyDropzone() {
       multiple: true
     })
 
-        const removeFile = (name) => {
-                    setFiles(prev => {
-                        const removed = prev.filter(file => file.name === name);
-                        removed.forEach(f => URL.revokeObjectURL(f.preview));
-                        setExtracted(prevMap => {
-                            const copy = {...prevMap};
-                            delete copy[name];
-                            return copy;
-                        });
-                        return prev.filter(file => file.name !== name);
-                    });
-        }
+  const removeFile = (name: string) => {
+    setFiles(prev => {
+      const removed = prev.filter(file => file.name === name)
+      removed.forEach(f => URL.revokeObjectURL(f.preview))
+      return prev.filter(file => file.name !== name)
+    })
+  }
 
         async function extractText(file: File) {
             try {
@@ -91,4 +86,4 @@ function MyDropzone() {
     )
     }
 
-export default MyDropzone;
+export default MyDropzone
