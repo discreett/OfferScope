@@ -2,7 +2,6 @@
 import React, {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import styles from '@/styles/dropzone.module.css'
-import { parse } from 'path';
 
 type pdfWithPreview = File & { preview: string };
 
