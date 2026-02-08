@@ -51,7 +51,7 @@ function MyDropzone() {
             });
             
             const data = await res.json();
-            setResult(data.text || data.error || 'No text extracted');
+            setResult(JSON.stringify(data.offer, null, 2))
         } catch (err) {
             setResult(String(err));
         }
