@@ -1,21 +1,21 @@
-import { extractText, getDocumentProxy } from 'unpdf'
+import { extractText, getDocumentProxy } from "unpdf";
 import OpenAI from "openai";
-import { z } from 'zod'
-import { zodResponseFormat } from 'openai/helpers/zod.mjs';
+import { z } from "zod";
+import { zodTextFormat } from "openai/helpers/zod.mjs";
 
 export async function POST(request: Request) {
   try {
     const client = new OpenAI();
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get("file");
 
     if (!file || !(file instanceof File)) {
-      return Response.json({ error: 'No file uploaded' }, { status: 400 })
+      return Response.json({ error: "No file uploaded" }, { status: 400 });
     }
 
     const buffer = await file.arrayBuffer();
     const pdf = await getDocumentProxy(new Uint8Array(buffer));
-    const {text} = await extractText(pdf, { mergePages: true });
+    const { text } = await extractText(pdf, { mergePages: true });
 
     const OfferInfo = z.object({
       company: z.string(),
@@ -29,10 +29,11 @@ export async function POST(request: Request) {
 
     const response = await client.responses.parse({
       model: "gpt-5-mini-2025-08-07",
-      messages: [
+      input: [
         {
           role: "system",
-          content: "You are an assistant that extracts structured information from offer letters. Extract the requested information and return it in the specified JSON format. If information is missing or not applicable, use an empty string."
+          content:
+            "Extract structured information from offer letters. Return empty strings for missing fields.",
         },
         {
           role: "user",
@@ -46,20 +47,22 @@ export async function POST(request: Request) {
           - Type of employment (remote/hybrid/in-person, otherwise empty string)
 
           Text to analyze:
-          ${text}`
-        }
+          ${text}`,
+        },
       ],
-      response_format: zodResponseFormat(OfferInfo, "offer_info")
+      text: { format: zodTextFormat(OfferInfo, "offer_info") },
     });
 
-    const parsed = JSON.parse(response.output_parsed || '{}');
-    return Response.json({ offer: parsed })
+    return Response.json({ offer: response.output_parsed });
 
   } catch (e) {
-    console.error('API Error:', e);
-    return Response.json({ 
-      error: 'Failed to process file', 
-      details: e instanceof Error ? e.message : 'Unknown error' 
-    }, { status: 500 })
+    console.error("API Error:", e);
+    return Response.json(
+      {
+        error: "Failed to process file",
+        details: e instanceof Error ? e.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }
