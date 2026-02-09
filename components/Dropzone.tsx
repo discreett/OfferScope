@@ -2,6 +2,7 @@
 import React, {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import styles from '@/styles/dropzone.module.css'
+import { parse } from 'path';
 
 type pdfWithPreview = File & { preview: string };
 
@@ -39,10 +40,10 @@ function MyDropzone() {
         )
     }
 
-    const parsePdf = async (file: pdfWithPreview) => {
+    const parsePdf = async (files: pdfWithPreview[]) => {
         try {
             const formData = new FormData();
-            formData.append('file', file);
+            files.forEach(file => formData.append('files', file));
 
             const res = await fetch('/api/parse', {
                 method: 'POST',
@@ -50,7 +51,7 @@ function MyDropzone() {
             });
             
             const data = await res.json();
-            setResult(JSON.stringify(data.offer, null, 2))
+            setResult(JSON.stringify(data.offers, null, 2))
         } catch (err) {
             setResult(String(err));
         }
@@ -83,15 +84,25 @@ function MyDropzone() {
                     <button type = "button" onClick={() => removeFile(file.name)}>
                         Remove
                     </button>
-
-                    <button type="button" onClick={() => parsePdf(file)}>
-                        Extract
-                    </button>
-
                     <p>{file.name}</p>
                     <p>{result}</p>
                 </li>
             ))}
+
+            {files.length == 1 && (
+                <p style={{color: 'red'}}>Select one more!</p>
+            )}
+
+            {files.length > 2 && (
+                <p style={{color: 'red'}}>Only 2 files allowed</p>
+            )}
+
+            {files.length == 2 && (
+                <button type = "button" onClick={() => parsePdf(files)}>
+                    Extract
+                </button>
+            )}
+
         </ul>
         </form>
     )
