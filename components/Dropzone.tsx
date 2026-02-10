@@ -8,7 +8,18 @@ type pdfWithPreview = File & { preview: string };
 
 function MyDropzone() {
     const [files, setFiles] = useState<pdfWithPreview[]>([]);
-    const [result, setResult] = useState<string>('');
+    const [result, setResult] = useState<any>(null);
+
+    const OFFER_FIELDS = [
+        { key: "company", label: "Company" },
+        { key: "job_title", label: "Job Title" },
+        { key: "pay", label: "Pay" },
+        { key: "location", label: "Location" },
+        { key: "start_date", label: "Start Date" },
+        { key: "end_date", label: "End Date" },
+        { key: "offer_deadline", label: "Offer Deadline" },
+        { key: "type_of_employment", label: "Work Type" }
+    ]
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         const pdfs = (acceptedFiles || []).filter(file =>
@@ -51,7 +62,7 @@ function MyDropzone() {
             });
             
             const data = await res.json();
-            setResult(JSON.stringify(data.offers, null, 2))
+            setResult(data.offers)
         } catch (err) {
             setResult(String(err));
         }
@@ -84,8 +95,6 @@ function MyDropzone() {
                     <button type = "button" onClick={() => removeFile(file.name)}>
                         Remove
                     </button>
-                    <p>{file.name}</p>
-                    <p>{result}</p>
                 </li>
             ))}
 
@@ -101,6 +110,27 @@ function MyDropzone() {
                 <button type = "button" onClick={() => parsePdf(files)}>
                     Extract
                 </button>
+            )}
+
+            {result && Array.isArray(result) && (
+            <div>
+                {result.map((offer, index) => (
+                <div key={index}>
+                    <h2>Offer Information</h2>
+                    <h3>Offer {index + 1}</h3>
+                    {OFFER_FIELDS.map(({ key, label }) => {
+                        const value = offer[key]
+                        if (!value) return null
+
+                        return (
+                            <p key={key}>
+                            <strong>{label}:</strong> {value}
+                            </p>
+                        )
+                    })}
+                </div>
+                ))}
+            </div>
             )}
 
         </ul>
