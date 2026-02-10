@@ -1,8 +1,7 @@
 'use client'
-import React, {useCallback, useState} from 'react'
+import {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import styles from '@/styles/dropzone.module.css'
-import { parse } from 'path';
 
 type pdfWithPreview = File & { preview: string };
 
@@ -75,65 +74,64 @@ function MyDropzone() {
                     className: styles.container
                 }
             )}>
-        <input {...getInputProps()} />
-        {
-            isDragActive ?
-            <p>Drop the files here ...</p> :
-            <p>Drag 'n' drop some files here, or click to select files</p>
-        }
-        </div>
-
-        <ul>
-            {files.map(file => (
-                <li key={file.name}>
-                    <img src={file.preview}
-                        alt={file.name}
-                        width={100}
-                        height={100}
-                        onLoad={() => URL.revokeObjectURL(file.preview)}
-                    />
-                    <button type = "button" onClick={() => removeFile(file.name)}>
-                        Remove
-                    </button>
-                </li>
-            ))}
-
-            {files.length == 1 && (
-                <p style={{color: 'red'}}>Select one more!</p>
-            )}
-
-            {files.length > 2 && (
-                <p style={{color: 'red'}}>Only 2 files allowed</p>
-            )}
-
-            {files.length == 2 && (
-                <button type = "button" onClick={() => parsePdf(files)}>
-                    Extract
-                </button>
-            )}
-
-            {result && Array.isArray(result) && (
-            <div>
-                {result.map((offer, index) => (
-                <div key={index}>
-                    <h2>Offer Information</h2>
-                    <h3>Offer {index + 1}</h3>
-                    {OFFER_FIELDS.map(({ key, label }) => {
-                        const value = offer[key]
-                        if (!value) return null
-
-                        return (
-                            <p key={key}>
-                            <strong>{label}:</strong> {value}
-                            </p>
-                        )
-                    })}
-                </div>
-                ))}
+                <input {...getInputProps()} />
+                {
+                    isDragActive ?
+                    <p>Drop the files here ...</p> :
+                    <p>Drag 'n' drop some files here, or click to select files</p>
+                }
             </div>
-            )}
 
-        </ul>
+            <ul>
+                {files.map(file => (
+                    <li key={file.name}>
+                        <img src={file.preview}
+                            alt={file.name}
+                            width={100}
+                            height={100}
+                            onLoad={() => URL.revokeObjectURL(file.preview)}
+                        />
+                        <button type = "button" onClick={() => removeFile(file.name)}>
+                            Remove
+                        </button>
+                    </li>
+                ))}
+
+                {files.length == 1 && (
+                    <p style={{color: 'red'}}>Select one more!</p>
+                )}
+
+                {files.length > 2 && (
+                    <p style={{color: 'red'}}>Only 2 files allowed</p>
+                )}
+
+                {files.length == 2 && (
+                    <button type = "button" onClick={() => parsePdf(files)}>
+                        Extract
+                    </button>
+                )}
+
+                {result && Array.isArray(result) && (
+                <div>
+                    {result.map((offer, index) => (
+                    <div key={index}>
+                        <h2>Offer Information</h2>
+                        <h3>Offer {index + 1}</h3>
+                        {OFFER_FIELDS.map(({ key, label }) => {
+                            const value = offer[key]
+                            if (!value) return null
+
+                            return (
+                                <p key={key}>
+                                <strong>{label}:</strong> {value}
+                                </p>
+                            )
+                        })}
+                    </div>
+                    ))}
+                </div>
+                )}
+            </ul>
         </form>
     )
 }
