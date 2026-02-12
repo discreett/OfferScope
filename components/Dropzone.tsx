@@ -1,7 +1,6 @@
 'use client'
 import {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
-import styles from '@/styles/dropzone.module.css'
 
 type pdfWithPreview = File & { preview: string };
 
@@ -71,14 +70,14 @@ function MyDropzone() {
         <form>
             <div {...getRootProps(
                 {
-                    className: styles.container
+                    className:"border-3 rounded-xl border-dashed border-[#7E78D2] p-30 text-center bg-gradient-to-r from-[#B8B8FF] to-[#B7BBF5] w-3/4 mx-auto"
                 }
             )}>
                 <input {...getInputProps()} />
                 {
                     isDragActive ?
                     <p>Drop the files here ...</p> :
-                    <p>Drag 'n' drop some files here, or click to select files</p>
+                    <p className="text-2xl">Click or drag and drop to select files</p>
                 }
             </div>
 
