@@ -81,56 +81,50 @@ function MyDropzone() {
                 }
             </div>
 
-            <ul>
-                {files.map(file => (
-                    <li key={file.name}>
-                        <img src={file.preview}
-                            alt={file.name}
-                            width={100}
-                            height={100}
-                            onLoad={() => URL.revokeObjectURL(file.preview)}
-                        />
-                        <button type = "button" onClick={() => removeFile(file.name)}>
-                            Remove
-                        </button>
-                    </li>
-                ))}
-
-                {files.length == 1 && (
-                    <p style={{color: 'red'}}>Select one more!</p>
-                )}
-
-                {files.length > 2 && (
-                    <p style={{color: 'red'}}>Only 2 files allowed</p>
-                )}
-
-                {files.length == 2 && (
-                    <button type = "button" onClick={() => parsePdf(files)}>
-                        Extract
-                    </button>
-                )}
-
-                {result && Array.isArray(result) && (
-                <div>
-                    {result.map((offer, index) => (
-                    <div key={index}>
-                        <h2>Offer Information</h2>
-                        <h3>Offer {index + 1}</h3>
-                        {OFFER_FIELDS.map(({ key, label }) => {
-                            const value = offer[key]
-                            if (!value) return null
-
-                            return (
-                                <p key={key}>
-                                <strong>{label}:</strong> {value}
-                                </p>
-                            )
-                        })}
-                    </div>
+            <section className="bg-[#DEDFF8] mt-10 mb-5 rounded-xl p-5 w-3/4 mx-auto shadow-md">
+                <div className={`grid gap-4 ${files.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                    {files.map(file => (
+                        <div key={file.name} className="bg-[#E4E4FB] p-4 rounded-lg border-2 border-[#7E78D2] flex flex-col items-center">
+                            <p>{file.name}</p>
+                            <button type="button" onClick={() => removeFile(file.name)} className="mt-2 px-3 py-1 bg-[#E8D6F5] text-[#6B21A8] rounded">
+                                Remove
+                            </button>
+                        </div>
                     ))}
                 </div>
+            </section>
+
+            {files.length >= 1 && (
+                <button 
+                className="bg-[#7B68EE] text-white px-6 py-4 rounded-lg font-semibold hover:bg-[#B6B8D6] transition-colors mt-8 align-center mx-auto block shadow-sm"
+                type = "button" onClick={() => parsePdf(files)}>
+                    Process your offers
+                </button>
+            )}
+
+            <section>
+                {result && Array.isArray(result) && (
+                    <div className={`grid gap-6 mt-10 mb-5 rounded-xl p-6 w-3/4 mx-auto bg-[#DEDFF8] shadow-xl ${result.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                        {result.map((offer, index) => (
+                            <div key={index} className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-[#7B68EE]">
+                                <h3 className="text-xl font-bold text-[#7B68EE] mb-4 border-b pb-2">Offer {index + 1}</h3>
+                                <div className="space-y-3">
+                                    {OFFER_FIELDS.map(({ key, label }) => {
+                                        const value = offer[key]
+                                        if (!value) return null
+                                        return (
+                                            <div key={key} className="flex flex-col">
+                                                <span className="text-sm font-medium text-gray-600">{label}</span>
+                                                <span className="text-lg text-gray-800 bg-gray-50 p-2 rounded mt-1">{value}</span>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 )}
-            </ul>
+            </section>
         </form>
     )
 }
