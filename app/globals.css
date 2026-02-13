@@ -5,5 +5,5 @@
 @tailwind utilities;
 
 body {
-  @apply min-h-screen bg-linear-to-t from-[#E4E4FB] to-[#F8F7FF];
+  @apply min-h-screen bg-[#E4E4FB] font-mono;
 }
