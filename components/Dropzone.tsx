@@ -81,7 +81,12 @@ function MyDropzone() {
                 }
             </div>
 
-            <section className="bg-[#DEDFF8] mt-10 mb-5 rounded-xl p-5 w-3/4 mx-auto shadow-md">
+            <section className="bg-[#DEDFF8] mt-10 mb-5 rounded-xl p-5 w-3/4 mx-auto shadow-md pb-50 text-center">
+
+                {files.length < 1 && (
+                    <p className="text-gray-600">No offers uploaded yet. Upload your files and get started!</p>
+                )}
+
                 <div className={`grid gap-4 ${files.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
                     {files.map(file => (
                         <div key={file.name} className="bg-[#E4E4FB] p-4 rounded-lg border-2 border-[#7E78D2] flex flex-col items-center">

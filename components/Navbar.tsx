@@ -14,7 +14,7 @@ function myNav() {
 
                     <nav className="flex gap-8 items-center">
                         <a href="/login" className="text-gray-700 hover:text-[#B8B8FF] transition-colors font-medium">Log In</a>
-                        <a href="/signup" className="px-4 py-2 font-medium bg-[#7B68EE] text-white rounded-lg font-semibold hover:bg-[#B6B8D6] transition-colors">Sign up</a>
+                        <a href="/signup" className="px-4 py-2 font-medium bg-[#7B68EE] text-white rounded-lg font-semibold hover:bg-[#B6B8D6] hover:text-[#7B68EE] transition-colors">Sign up</a>
                     </nav>
                 </div>
             </div>
