@@ -55,6 +55,19 @@ function myHome() {
                         </div>
                     </div>
                 </section>
+
+                <section className="h-screen flex items-center justify-center" id="about">
+                    <div className="p-10 rounded-xl w-3/4 mx-auto">
+                        <h2 className="text-5xl text-center tracking-wide mb-8 text-gray-800 font-bold">About OfferScope</h2>
+                        <p className="text-sm/10">OfferLens was built to solve a common problem: comparing job offers shouldn’t feel overwhelming.
+
+Offer letters are often filled with complex terms and fine print. This project uses AI to extract key information and present it in a way that makes comparisons easier and more transparent.
+
+Built as a full-stack AI application, the goal is to combine thoughtful software design with practical career tools.
+
+Your documents are processed only to provide summaries and comparisons. We do not sell or share user data.</p>
+                    </div>
+                </section>
             </div>
             <Footer/>
         </main>

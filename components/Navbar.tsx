@@ -8,7 +8,7 @@ function myNav() {
                     <a href="/home" className="text-3xl font-bold bg-gradient-to-r from-[#B8B8FF] to-[#7B68EE] text-transparent bg-clip-text">OfferScope</a>
                     <nav className="flex gap-20">
                         <a href="/home" className="text-gray-700 hover:text-[#B8B8FF] transition-colors font-medium">Home</a>
-                        <a href="/about" className="text-gray-700 hover:text-[#B8B8FF] transition-colors font-medium">About</a>
+                        <a href="/home#about" className="text-gray-700 hover:text-[#B8B8FF] transition-colors font-medium">About</a>
                         <a href="/contact" className="text-gray-700 hover:text-[#B8B8FF] transition-colors font-medium">Contact</a>
                     </nav>
 
