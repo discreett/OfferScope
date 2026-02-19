@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.95.3",
+    "@supabase/supabase-js": "^2.97.0",
     "@tailwindcss/cli": "^4.1.18",
     "motion": "^12.34.0",
     "next": "16.1.6",
