@@ -1,6 +1,7 @@
 'use client';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { signup } from '../app/login/actions';
 
 function mySignup() {
     return (
@@ -27,7 +28,7 @@ function mySignup() {
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Confirm Password</label>
                             <input type="password" id="password" name="password" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#7B68EE] focus:border-[#7B68EE]" placeholder="Your Password" />
                         </div>
-                        <button type="submit" className="w-full bg-[#7B68EE] text-white py-2 px-4 rounded-md shadow-sm hover:bg-[#B6B8D6] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7B68EE]">Sign In</button>
+                        <button type="submit" formAction={signup} className="w-full bg-[#7B68EE] text-white py-2 px-4 rounded-md shadow-sm hover:bg-[#B6B8D6] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7B68EE]">Sign In</button>
                     </form>
                 </div>
             </section>
