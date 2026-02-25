@@ -1,7 +1,7 @@
 'use client';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { signup } from '../app/login/actions';
+import { signup } from '../app/signup/actions';
 
 function mySignup() {
     return (
