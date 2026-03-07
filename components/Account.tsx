@@ -3,13 +3,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { type User } from '@supabase/supabase-js'
 
-// ...
-
 export default function AccountForm({ user }: { user: User | null }) {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
   const [fullname, setFullname] = useState<string | null>(null)
-  const [username, setUsername] = useState<string | null>(null)
 
   const getProfile = useCallback(async () => {
     try {
@@ -18,7 +15,7 @@ export default function AccountForm({ user }: { user: User | null }) {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`full_name, username`)
+        .select(`full_name`)
         .eq('id', user?.id)
         .single()
 
@@ -29,7 +26,6 @@ export default function AccountForm({ user }: { user: User | null }) {
 
       if (data) {
         setFullname(data.full_name)
-        setUsername(data.username)
       }
     } catch (error) {
       alert('Error loading user data!')
@@ -42,35 +38,8 @@ export default function AccountForm({ user }: { user: User | null }) {
     getProfile()
   }, [user, getProfile])
 
-  async function updateProfile({
-    username,
-  }: {
-    username: string | null
-    fullname: string | null
-  }) {
-    try {
-      setLoading(true)
-
-      const { error } = await supabase.from('profiles').upsert({
-        id: user?.id as string,
-        full_name: fullname,
-        username,
-        updated_at: new Date().toISOString(),
-      })
-      if (error) throw error
-      alert('Profile updated!')
-    } catch (error) {
-      alert('Error updating the data!')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
     <div className="form-widget">
-
-      {/* ... */}
-
       <div>
         <label htmlFor="email">Email</label>
         <input id="email" type="text" value={user?.email} disabled />
@@ -83,25 +52,6 @@ export default function AccountForm({ user }: { user: User | null }) {
           value={fullname || ''}
           onChange={(e) => setFullname(e.target.value)}
         />
-      </div>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          value={username || ''}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-
-      <div>
-        <button
-          className="button primary block"
-          onClick={() => updateProfile({ fullname, username })}
-          disabled={loading}
-        >
-          {loading ? 'Loading ...' : 'Update'}
-        </button>
       </div>
 
       <div>

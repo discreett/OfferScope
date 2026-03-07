@@ -13,13 +13,11 @@ function mySignup() {
         // Clear previous errors
         setError("");
         
-        // Check if passwords match
         if (password !== confirmPassword) {
             setError("Passwords do not match!");
             return;
         }
 
-        // Check password strength (optional)
         if (password.length < 6) {
             setError("Password must be at least 6 characters long!");
             return;
