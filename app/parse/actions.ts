@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { a } from 'motion/react-client'
 
 type Offer = {
   company?: string | null
@@ -45,4 +44,31 @@ export async function parseAdd(offers: Offer[]) {
   }
 
   return { success: true }
+}
+
+export async function docAdd(files: File[]) {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const doc = files.map((doc) => ({
+    user_id: user.id,
+    file_name: doc.name,
+    file_size: doc.size,
+    status: 'processing',
+  }))
+
+  const { data, error } = await supabase
+    .from('documents')
+    .insert(doc)
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data;
 }

@@ -1,7 +1,7 @@
 'use client'
 import {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
-import { parseAdd } from '../app/parse/actions'
+import { parseAdd, docAdd } from '../app/parse/actions'
 
 type pdfWithPreview = File & { preview: string };
 
@@ -52,6 +52,7 @@ function MyDropzone() {
 
     const parsePdf = async (files: pdfWithPreview[]) => {
         try {
+            await docAdd(files)
             const formData = new FormData();
             files.forEach(file => formData.append('files', file));
 
