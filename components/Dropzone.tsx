@@ -1,6 +1,7 @@
 'use client'
 import {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
+import { parseAdd } from '../app/parse/actions'
 
 type pdfWithPreview = File & { preview: string };
 
@@ -61,6 +62,7 @@ function MyDropzone() {
             
             const data = await res.json();
             setResult(data.offers)
+            await parseAdd(data.offers)
         } catch (err) {
             setResult(String(err));
         }
