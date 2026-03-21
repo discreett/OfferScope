@@ -21,6 +21,7 @@ function myLogin() {
                             <input type="password" id="password" name="password" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-[#7B68EE] focus:border-[#7B68EE]" placeholder="Your Password" />
                         </div>
                         <button type="submit" formAction={login} className="w-full bg-[#7B68EE] text-white py-2 px-4 rounded-md shadow-sm hover:bg-[#B6B8D6] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7B68EE]">Sign In</button>
+                        <p>Forgot your password? <a href="/forgot-password" className="text-[#B8B8FF]">Reset it here</a></p>
                     </form>
                 </div>
             </section>

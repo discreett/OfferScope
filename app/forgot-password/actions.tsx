@@ -1,0 +1,10 @@
+'use server'
+import { createClient } from '@/lib/supabase/server'
+
+export async function forgot(formData: FormData) {
+  const supabase = await createClient()
+
+  await supabase.auth.resetPasswordForEmail(formData.get('email') as string, {
+    redirectTo: 'http://example.com/account/update-password',
+  })
+}
