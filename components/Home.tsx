@@ -2,7 +2,11 @@
 
 import Navbar from './Navbar'
 import Footer from './Footer'
-function myHome() {
+import { createClient } from '@/lib/supabase/client'
+async function myHome() {
+    const supabase = await createClient()
+    const { data, error } = await supabase.auth.getSession()
+
     return (
         <main className="min-h-screen">
             <div>
