@@ -1,5 +1,7 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
+import Navbar from './Navbar'
+import Footer from './Footer'
 import { createClient } from '@/lib/supabase/client'
 import { type User } from '@supabase/supabase-js'
 
@@ -39,28 +41,32 @@ export default function AccountForm({ user }: { user: User | null }) {
   }, [user, getProfile])
 
   return (
-    <div className="form-widget">
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={user?.email} disabled />
-      </div>
-      <div>
-        <label htmlFor="fullName">Full Name</label>
-        <input
-          id="fullName"
-          type="text"
-          value={fullname || ''}
-          onChange={(e) => setFullname(e.target.value)}
-        />
-      </div>
+    <main className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="form-widget">
+        <div>
+          <label htmlFor="email">Email</label>
+          <input id="email" type="text" value={user?.email} disabled />
+        </div>
+        <div>
+          <label htmlFor="fullName">Full Name</label>
+          <input
+            id="fullName"
+            type="text"
+            value={fullname || ''}
+            onChange={(e) => setFullname(e.target.value)}
+          />
+        </div>
 
-      <div>
-        <form action="/auth/signout" method="post">
-          <button className="button block" type="submit">
-            Sign out
-          </button>
-        </form>
+        <div>
+          <form action="/auth/signout" method="post">
+            <button className="button block" type="submit">
+              Sign out
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </main>
   )
 }

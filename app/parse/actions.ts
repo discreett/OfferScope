@@ -36,7 +36,7 @@ export async function parseAdd(offers: Offer[]) {
   }))
 
   const { error } = await supabase
-    .from('offers')
+    .from('extractions')
     .insert(offer)
 
   if (error) {
