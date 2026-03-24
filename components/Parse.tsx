@@ -4,8 +4,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 function myParse() {
     return (
-        <main>
-            <div>
+        <main className="min-h-screen flex flex-col">
+            <div className="flex-1">
                 <Navbar/>
                 <section>
                     <div className="text-center">

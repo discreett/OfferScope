@@ -5,7 +5,7 @@ import { login } from '../app/login/actions';
 
 function myLogin() {
     return (
-        <main className="min-h-screen">
+        <main className="min-h-screen flex flex-col">
             <Navbar/>
             <section className="flex items-center justify-center py-25">
                 <div className="bg-white p-10 rounded-lg shadow-md shadow-[#7B68EE] w-full max-w-md">
