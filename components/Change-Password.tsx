@@ -9,7 +9,7 @@ function MyChange() {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     return (
-        <main className="min-h-screen">
+        <main className="min-h-screen flex flex-col">
             <Navbar/>
             <section className="flex items-center justify-center py-25">
                 <div className="bg-white p-10 rounded-lg shadow-md shadow-[#7B68EE] w-full max-w-md">
@@ -27,7 +27,7 @@ function MyChange() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required 
                             />
-                             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                             <label htmlFor="confirmPassword" className="mt-1 block text-sm font-medium text-gray-700">Confirm Password</label>
                             <input 
                                 type="password" 
                                 id="confirmPassword" 

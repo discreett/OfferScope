@@ -28,21 +28,6 @@ export async function signup(formData: FormData) {
 
   const user = data.user;
 
-  if (user) {
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .insert({
-        id: user.id,
-        full_name: name,
-        email: email,
-      })
-    
-    if (profileError) {
-      console.error("SUPABASE PROFILE INSERT ERROR:", profileError)
-      throw new Error(profileError.message)
-    }
-  }
-
   revalidatePath('/', 'layout')
   redirect('/account')
 }
