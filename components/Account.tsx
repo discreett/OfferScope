@@ -2,6 +2,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { type User } from '@supabase/supabase-js'
+import Navbar from './Navbar'
+import Footer from './Footer'
 
 export default function AccountForm({ user }: { user: User | null }) {
   const supabase = createClient()
@@ -39,28 +41,64 @@ export default function AccountForm({ user }: { user: User | null }) {
   }, [user, getProfile])
 
   return (
-    <div className="form-widget">
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={user?.email} disabled />
+    <main className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="mt-10">
+        <h2 className="text-5xl text-center tracking-wide mb-8 text-gray-800 font-bold">Account Settings</h2>
       </div>
-      <div>
-        <label htmlFor="fullName">Full Name</label>
-        <input
-          id="fullName"
-          type="text"
-          value={fullname || ''}
-          onChange={(e) => setFullname(e.target.value)}
-        />
-      </div>
+      <section className="flex items-center justify-center py-10">
+        <div className="bg-white p-10 rounded-lg shadow-md shadow-[#7B68EE] w-full max-w-lg">
+          <div className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email
+              </label>
+              <input 
+                id="email" 
+                type="email" 
+                value={user?.email || ''} 
+                disabled 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                Full Name
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                value={fullname || ''}
+                onChange={(e) => setFullname(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#7B68EE] focus:border-[#7B68EE]"
+                placeholder="Enter your full name"
+              />
+            </div>
 
-      <div>
-        <form action="/auth/signout" method="post">
-          <button className="button block" type="submit">
-            Sign out
-          </button>
-        </form>
-      </div>
-    </div>
+            <div className="pt-4">
+              <a 
+                href="/change-password" 
+                className="inline-block w-full text-center bg-[#7B68EE] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#B6B8D6] hover:text-[#7B68EE] transition-colors"
+              >
+                Change Password
+              </a>
+            </div>
+
+            <div>
+              <form action="/auth/signout" method="post">
+                <button 
+                  className="w-full bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors" 
+                  type="submit"
+                >
+                  Sign out
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      <Footer/>
+    </main>
   )
 }
