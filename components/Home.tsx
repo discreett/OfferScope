@@ -2,11 +2,7 @@
 
 import Navbar from './Navbar'
 import Footer from './Footer'
-import { createClient } from '@/lib/supabase/client'
-async function myHome() {
-    const supabase = await createClient()
-    const { data, error } = await supabase.auth.getSession()
-
+function myHome() {
     return (
         <main className="min-h-screen flex flex-col">
             <div>

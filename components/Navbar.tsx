@@ -1,9 +1,26 @@
 'use client'
 
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { type User } from '@supabase/supabase-js';
 function myNav() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
+    const supabase = createClient();
+    
+    useEffect(() => {
+        // Get initial session
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            setUser(user);
+        });
+
+        // Listen for auth state changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
 
     return(
          <header className="bg-[white]/75 backdrop-blur-md shadow-xs sticky top-0 z-50 font-mono">
@@ -18,8 +35,17 @@ function myNav() {
                     </nav>
 
                     <nav className="hidden md:flex gap-8 items-center">
-                        <a href="/login" className="text-gray-700 hover:text-[#B8B8FF] transition-colors font-medium">Log In</a>
-                        <a href="/signup" className="px-4 py-2 font-medium bg-[#7B68EE] text-white rounded-lg font-semibold hover:bg-[#B6B8D6] hover:text-[#7B68EE] transition-colors">Sign up</a>
+
+                        {user ? (
+                            <>
+                                <a href="/account" className="text-gray-700 hover:text-[#B8B8FF] transition-colors font-medium">Account</a>
+                            </>
+                        ) : (
+                            <>
+                                <a href="/login" className="text-gray-700 hover:text-[#B8B8FF] transition-colors font-medium">Log In</a>
+                                <a href="/signup" className="px-4 py-2 font-medium bg-[#7B68EE] text-white rounded-lg font-semibold hover:bg-[#B6B8D6] hover:text-[#7B68EE] transition-colors">Sign up</a>
+                            </>
+                        )}
                     </nav>
 
                     <button 
